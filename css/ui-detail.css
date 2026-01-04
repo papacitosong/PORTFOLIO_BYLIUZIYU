@@ -1,0 +1,409 @@
+/* 复用导航栏样式 + 全局重置（统一整合，无冗余） */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 星空背景样式 */
+.star-sky {
+    width: 100vw;
+    height: 100vh;
+    background-color: #0a0a1a;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1; /* 星空在最底层 */
+}
+
+.star {
+    position: absolute;
+    background-color: #fff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: starFloat infinite ease-in-out;
+}
+
+@keyframes starFloat {
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(-10px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+}
+
+/* 全局body样式 */
+body {
+    font-family: "Microsoft Yahei", sans-serif;
+    background-color: #121224;
+    color: #fff;
+    overflow-x: hidden; /* 防止横向滚动 */
+}
+
+/* 导航栏样式 */
+.nav-bar {
+    width: 100%;
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.nav-logo a {
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+}
+
+.nav-menu li {
+    margin-left: 30px;
+}
+
+.nav-menu li a {
+    color: #fff;
+    font-size: 16px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-menu li a:hover {
+    color: #4a90e2;
+}
+
+/* 详情页专属样式 */
+.detail-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 40px 60px; /* 预留导航栏高度 */
+}
+
+/* 返回按钮 */
+.back-btn {
+    display: inline-block;
+    color: #4a90e2;
+    text-decoration: none;
+    font-size: 18px;
+    margin-bottom: 30px;
+    transition: color 0.3s ease;
+}
+.back-btn:hover {
+    color: #8ab4f8;
+}
+
+/* 作品标题 */
+.detail-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+.detail-title h2 {
+    font-size: 42px;
+    text-shadow: 0 0 8px rgba(74, 144, 226, 0.8);
+    margin-bottom: 10px;
+}
+.detail-title p {
+    font-size: 18px;
+    color: #ccc;
+}
+
+/* 每个展示区域（视频/图片/文字）的通用样式 */
+.detail-section {
+    margin-bottom: 60px;
+}
+.detail-section h3 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #4a90e2;
+    border-left: 4px solid #4a90e2;
+    padding-left: 10px;
+}
+
+/* 视频区域 */
+.video-wrapper {
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 10px;
+}
+
+/* 图片网格区域 - 适配A3比例（297:420 ≈ 1:1.414） */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 移动端/PC端自适应列宽 */
+    gap: 20px;
+}
+
+/* A3比例容器（核心：完整显示图片，不裁剪） */
+.img-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 141.4%; /* A3比例：高度=宽度×1.414（297mm/420mm） */
+    border-radius: 8px;
+    border: 2px solid rgba(74, 144, 226, 0.3);
+    overflow: hidden; /* 仅裁剪极特殊情况的溢出，实际不会触发 */
+}
+
+/* 图片样式 - 完整显示A3比例，不裁剪 */
+.img-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 核心：完整显示图片，保持A3比例，无裁剪 */
+    background-color: #1a1a2e; /* 图片间隙背景色，和星空呼应 */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* 悬浮轻微放大（不影响完整显示） */
+.img-wrapper img:hover,
+.phone-img-wrapper img:hover { /* 合并图片悬浮放大效果 */
+    transform: scale(1.02);
+}
+
+/* 文字说明区域 */
+.text-desc {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 25px;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #eee;
+}
+.text-desc strong {
+    color: #4a90e2;
+}
+
+/* 大图预览样式（点击后显示完整高清大图） */
+.img-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 9999; /* 确保在最顶层 */
+    display: none; /* 默认隐藏 */
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-img {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain; /* 预览大图也完整显示，不裁剪 */
+    border-radius: 8px;
+    border: 2px solid #4a90e2;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: #fff;
+    font-size: 40px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #4a90e2;
+}
+
+/* 成员名单样式 */
+.simple-member {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 60px; /* 底部留白，不贴边 */
+    padding: 0 40px;
+    font-size: 16px;
+    color: #eee;
+    text-align: left; /* 左对齐，和返回按钮、标题风格一致 */
+}
+
+.simple-member p {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 15px 25px;
+    border-radius: 8px;
+    border-left: 4px solid #4a90e2; /* 小装饰，和标题呼应 */
+}
+
+/* 手机尺寸图片容器样式（适配移动端界面展示） */
+.phone-img-wrapper {
+    width: 100%;
+    max-width: 300px; /* 限制最大宽度，模拟手机尺寸 */
+    margin: 0 auto; /* 居中显示，更贴合手机展示效果 */
+    position: relative;
+    border-radius: 20px; /* 手机圆角效果 */
+    overflow: hidden;
+    border: 8px solid #000; /* 手机边框样式，增强真实感 */
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.2);
+}
+
+.phone-img-wrapper img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* 小组描述文字样式（占位div配套样式） */
+.group-desc {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 15px 20px;
+    color: #eee;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* -------------------------- 移动端适配增强优化（768px及以下，无冗余） -------------------------- */
+@media (max-width: 768px) {
+    /* 1. 导航栏深度适配：优化高度、内边距、字体，解决滚动问题 */
+    .nav-bar {
+        height: 50px; /* 降低导航栏高度，适配手机顶部状态栏 */
+        padding: 0 15px; /* 减小左右内边距，避免文字贴边 */
+    }
+
+    .nav-logo a {
+        font-size: 16px; /* 缩小logo文字，节省空间 */
+    }
+
+    .nav-menu {
+        overflow-x: auto; /* 解决导航项过多横向溢出问题 */
+        padding-bottom: 5px; /* 避免滚动条遮挡文字 */
+        -webkit-overflow-scrolling: touch; /* 移动端顺滑滚动体验 */
+    }
+
+    .nav-menu li {
+        margin-left: 12px; /* 减小导航项间距，容纳更多选项 */
+        white-space: nowrap; /* 防止导航文字换行错乱 */
+    }
+
+    .nav-menu li a {
+        font-size: 12px; /* 缩小导航文字，提升移动端可读性 */
+    }
+
+    /* 2. 详情容器适配：优化内边距，避免内容溢出 */
+    .detail-container {
+        padding: 80px 15px 40px; /* 减少上下内边距，左右留白更合理 */
+    }
+
+    /* 3. 按钮与标题适配：缩小字体，减小间距，贴合手机视觉 */
+    .back-btn {
+        font-size: 16px; /* 缩小返回按钮文字 */
+        margin-bottom: 20px; /* 减小与标题的间距 */
+    }
+
+    .detail-title {
+        margin-bottom: 30px; /* 减小标题与内容的间距 */
+    }
+
+    .detail-title h2 {
+        font-size: 26px; /* 大幅缩小主标题，适配手机屏幕 */
+    }
+
+    .detail-title p {
+        font-size: 14px; /* 缩小副标题，提升可读性 */
+    }
+
+    /* 4. 内容区域适配：优化字体、间距、边框 */
+    .detail-section {
+        margin-bottom: 40px; /* 减小区域间距，节省屏幕空间 */
+    }
+
+    .detail-section h3 {
+        font-size: 20px; /* 缩小区域标题 */
+        margin-bottom: 15px; /* 减小标题与内容间距 */
+        border-left-width: 3px; /* 减细左侧装饰线，更精致 */
+        padding-left: 8px; /* 减小左侧内边距 */
+    }
+
+    /* 5. 图片网格适配：减小列宽和间距，避免过于松散 */
+    .image-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* 减小最小列宽，适配手机屏幕 */
+        gap: 15px; /* 减小图片间距，更紧凑 */
+    }
+
+    .img-wrapper {
+        border-width: 1px; /* 减细图片边框，更贴合移动端视觉 */
+        border-radius: 6px; /* 减小圆角，更精致 */
+    }
+
+    /* 6. 文字区域适配：优化内边距、字体、行高 */
+    .text-desc {
+        padding: 15px; /* 减小内边距，节省空间 */
+        font-size: 14px; /* 缩小文字，提升可读性 */
+        line-height: 1.6; /* 优化行高，避免文字重叠 */
+    }
+
+    /* 7. 大图预览适配：优化关闭按钮位置和大小 */
+    .img-modal {
+        padding: 15px; /* 减小预览容器内边距 */
+    }
+
+    .close-modal {
+        font-size: 30px; /* 缩小关闭按钮 */
+        top: 15px; /* 调整顶部位置 */
+        right: 15px; /* 调整右侧位置，避免贴边 */
+    }
+
+    .modal-img {
+        border-width: 1px; /* 减细预览图边框 */
+        border-radius: 6px; /* 减小预览图圆角 */
+    }
+
+    /* 8. 成员名单适配：优化内边距、字体、样式 */
+    .simple-member {
+        padding: 0 15px; /* 同步左右内边距，保持风格统一 */
+        font-size: 14px; /* 缩小文字 */
+        margin-bottom: 40px; /* 减小底部间距 */
+    }
+
+    .simple-member p {
+        padding: 12px 18px; /* 减小内边距 */
+        border-left-width: 3px; /* 减细左侧装饰线 */
+    }
+
+    /* 9. 手机图片容器与描述文字适配 */
+    .phone-img-wrapper {
+        max-width: 200px; /* 缩小手机模拟容器，更贴合手机比例 */
+        border-width: 5px; /* 减细手机边框，更精致 */
+        border-radius: 16px; /* 减小圆角，适配小尺寸 */
+        box-shadow: 0 3px 10px rgba(74, 144, 226, 0.2); /* 减淡阴影，更柔和 */
+    }
+
+    .group-desc {
+        font-size: 14px; /* 缩小描述文字 */
+        padding: 12px 16px; /* 减小内边距，节省空间 */
+        line-height: 1.5; /* 优化行高 */
+    }
+
+    /* 10. 视频容器适配：减小内边距，优化圆角 */
+    .video-wrapper {
+        padding: 5px; /* 减小视频容器内边距 */
+        border-radius: 6px; /* 减小圆角，更贴合移动端 */
+    }
+}

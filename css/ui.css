@@ -1,0 +1,275 @@
+/* 复用首页导航样式（和home.css中的导航样式一致，确保视觉统一） */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* 星空背景样式 */
+.star-sky {
+	width: 100vw;
+	height: 100vh;
+	background-color: #0a0a1a;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	/* 星空在最底层 */
+}
+
+.star {
+	position: absolute;
+	background-color: #fff;
+	border-radius: 50%;
+	opacity: 0;
+	animation: starFloat 3s infinite ease-in-out;
+}
+
+@keyframes starFloat {
+	0% {
+		transform: translateY(0);
+		opacity: 0;
+	}
+
+	50% {
+		transform: translateY(-10px);
+		opacity: 1;
+	}
+
+	100% {
+		transform: translateY(0);
+		opacity: 0;
+	}
+}
+
+body {
+	font-family: "Microsoft Yahei", sans-serif;
+	background-color: #121224;
+	/* 延续首页深色调，不突兀 */
+	color: #fff;
+	overflow-x: hidden; /* 禁止横向滚动，避免移动端错乱 */
+}
+
+.nav-bar {
+	width: 100%;
+	height: 60px;
+	background-color: rgba(0, 0, 0, 0.7);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 40px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100;
+}
+
+.nav-logo a {
+	color: #fff;
+	font-size: 20px;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.nav-menu {
+	display: flex;
+	list-style: none;
+}
+
+.nav-menu li {
+	margin-left: 30px;
+}
+
+.nav-menu li a {
+	color: #fff;
+	font-size: 16px;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.nav-menu li a:hover {
+	color: #4a90e2;
+}
+
+/* 新增UI设计页面专属样式 */
+.ui-works-container {
+	width: 100%;
+	padding: 100px 50px 50px;
+	/* 预留导航栏高度 */
+	max-width: 1400px;
+	margin: 0 auto;
+	/* 居中显示 */
+}
+
+.ui-title {
+	text-align: center;
+	margin-bottom: 60px;
+}
+
+.ui-title h2 {
+	font-size: 48px;
+	color: #fff;
+	text-shadow: 0 0 8px rgba(74, 144, 226, 0.8);
+	margin-bottom: 15px;
+}
+
+.ui-title p {
+	font-size: 20px;
+	color: #eee;
+}
+
+/* 作品列表布局 - 网格布局，适配多作品 */
+.ui-works-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+	gap: 40px;
+	/* 作品间距 */
+}
+
+/* 作品卡片样式 */
+.ui-work-card {
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: 12px;
+	overflow: hidden;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ui-work-card:hover {
+	transform: translateY(-10px);
+	/* 悬浮上移，提升交互感 */
+	box-shadow: 0 10px 20px rgba(74, 144, 226, 0.2);
+	/* 悬浮阴影 */
+}
+
+/* A3图片专用容器（固定宽高比，完美适配） */
+.work-img-container {
+	width: 100%;
+	/* A3纵向（竖版）比例：420/297≈141.4%；横向（横版）：297/420≈70.7%，按需修改 */
+	padding-bottom: 141.4%;
+	position: relative;
+	overflow: hidden;
+	border-bottom: 2px solid rgba(74, 144, 226, 0.5);
+}
+
+.work-img-container img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	/* object-fit: contain; 完整展示A3图片（不裁剪，推荐） */
+	/* object-fit: cover; 裁剪适配（保持卡片视觉统一） */
+	object-fit: contain;
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.work-info {
+	padding: 25px;
+}
+
+.work-info h3 {
+	font-size: 24px;
+	color: #fff;
+	margin-bottom: 10px;
+}
+
+.work-info p {
+	font-size: 16px;
+	color: #ccc;
+	line-height: 1.6;
+}
+
+/* 作品卡片跳转链接样式 */
+.card-link {
+	text-decoration: none;
+	/* 去除链接下划线 */
+	color: inherit;
+	/* 继承原有文字颜色 */
+	display: block;
+	/* 占满整个卡片，任意位置可点击 */
+}
+
+/* -------------------------- 移动端适配核心优化（768px及以下） -------------------------- */
+@media (max-width: 768px) {
+	/* 1. 导航栏适配：减小高度、内边距、字体 */
+	.nav-bar {
+		height: 50px; /* 降低导航栏高度，适配手机顶部 */
+		padding: 0 15px; /* 减小左右内边距，避免贴边 */
+	}
+
+	.nav-logo a {
+		font-size: 16px; /* 缩小logo文字 */
+	}
+
+	.nav-menu {
+		overflow-x: auto; /* 解决导航项过多横向滚动问题 */
+		padding-bottom: 5px; /* 避免滚动条遮挡文字 */
+		-webkit-overflow-scrolling: touch; /* 移动端顺滑滚动 */
+	}
+
+	.nav-menu li {
+		margin-left: 12px; /* 减小导航项间距 */
+		white-space: nowrap; /* 防止导航文字换行 */
+	}
+
+	.nav-menu li a {
+		font-size: 12px; /* 缩小导航文字，适配手机屏幕 */
+	}
+
+	/* 2. UI作品容器适配：减小内边距，避免文字/卡片溢出 */
+	.ui-works-container {
+		padding: 80px 15px 30px; /* 减少上下内边距，左右留白15px */
+	}
+
+	/* 3. 标题适配：缩小字体，减小间距 */
+	.ui-title {
+		margin-bottom: 30px; /* 减小标题与作品列表的间距 */
+	}
+
+	.ui-title h2 {
+		font-size: 28px; /* 大幅缩小主标题，适配手机 */
+		margin-bottom: 10px;
+	}
+
+	.ui-title p {
+		font-size: 14px; /* 缩小副标题，提升可读性 */
+		line-height: 1.5;
+	}
+
+	/* 4. 作品列表适配：减小卡片宽度和间距 */
+	.ui-works-list {
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* 减小卡片最小宽度 */
+		gap: 20px; /* 减小作品卡片间距，避免过于松散 */
+	}
+
+	/* 5. 作品卡片适配：优化内边距和字体 */
+	.ui-work-card {
+		border-radius: 8px; /* 减小圆角，更适配手机视觉 */
+	}
+
+	/* 6. 图片容器：保持宽高比不变，优化底部边框 */
+	.work-img-container {
+		border-bottom: 1px solid rgba(74, 144, 226, 0.5); /* 减细边框，更精致 */
+	}
+
+	/* 7. 作品信息适配：减小内边距和字体 */
+	.work-info {
+		padding: 15px; /* 减小内边距，节省手机屏幕空间 */
+	}
+
+	.work-info h3 {
+		font-size: 18px; /* 缩小作品标题 */
+		margin-bottom: 8px;
+	}
+
+	.work-info p {
+		font-size: 12px; /* 缩小作品描述 */
+		line-height: 1.4; /* 优化行高，避免文字重叠 */
+	}
+
+	/* 8. 悬浮效果优化：移动端弱化悬浮阴影，更流畅 */
+	.ui-work-card:hover {
+		transform: translateY(-5px); /* 减小上移距离，更贴合移动端交互 */
+		box-shadow: 0 5px 10px rgba(74, 144, 226, 0.2); /* 减淡阴影，更柔和 */
+	}
+}
